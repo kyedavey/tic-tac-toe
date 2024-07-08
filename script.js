@@ -1,11 +1,11 @@
-const gameboard = (function () {
+const gameBoard = (function () {
   let board = new Array(9);
   const getSquare = (position) => board[position];
   const setSquare = (position, symbol) => (board[position] = symbol);
   const reset = () => (board = new Array(9));
   const printToConsole = () => {
     console.log(
-      `Gameboard:\n0:${getSquare(0)} 1:${getSquare(1)} 2:${getSquare(
+      `gameBoard:\n0:${getSquare(0)} 1:${getSquare(1)} 2:${getSquare(
         2
       )}\n3:${getSquare(3)} 4:${getSquare(4)} 5:${getSquare(5)}\n6:${getSquare(
         6
@@ -25,15 +25,16 @@ const gameController = (function () {
 
   const startGame = () => {
     console.log("Starting New Game");
-    if (boardUsed) gameboard.reset();
+    if (boardUsed) gameBoard.reset();
     playerOne = createPlayer("Player 1", "X");
     playerTwo = createPlayer("Player 2", "O");
     activePlayer = playerOne;
     currentRound = 1;
     gameActive = true;
     boardUsed = true;
-    gameboard.printToConsole();
+    gameBoard.printToConsole();
     console.log(`${getActivePlayerName()}'s turn`);
+    displayController.renderGameBoard();
   };
 
   const playRound = (position) => {
@@ -41,13 +42,13 @@ const gameController = (function () {
       console.log("Game has not started");
       return;
     }
-    if (gameboard.getSquare(position)) {
+    if (gameBoard.getSquare(position)) {
       console.log("Square Taken, Replay Round");
       return;
     }
-    gameboard.setSquare(position, activePlayer.symbol);
+    gameBoard.setSquare(position, activePlayer.symbol);
     currentRound++;
-    gameboard.printToConsole();
+    gameBoard.printToConsole();
     if (checkWin()) {
       console.log(`${getActivePlayerName()} wins`);
       gameActive = false;
@@ -59,6 +60,7 @@ const gameController = (function () {
       return;
     }
     switchPlayer();
+    displayController.renderGameBoard();
     console.log(`${getActivePlayerName()}'s turn`);
   };
 
@@ -84,7 +86,7 @@ const gameController = (function () {
 
     return winningSequences.some((sequence) => {
       return sequence.every(
-        (position) => gameboard.getSquare(position) === activePlayer.symbol
+        (position) => gameBoard.getSquare(position) === activePlayer.symbol
       );
     });
   };
@@ -96,6 +98,21 @@ const gameController = (function () {
     playRound,
     getGameStatus,
   };
+})();
+
+const displayController = (function () {
+  const gameSquares = document.querySelectorAll(".game-square");
+
+  const renderGameBoard = () => {
+    gameSquares.forEach((square) => {
+      console.log(square.getAttribute("data-index"));
+      square.textContent = gameBoard.getSquare(
+        square.getAttribute("data-index")
+      );
+    });
+  };
+
+  return { renderGameBoard };
 })();
 
 function createPlayer(name, symbol) {
