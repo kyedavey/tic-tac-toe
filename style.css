@@ -7,14 +7,20 @@
 
 html {
   font-family: "Roboto", sans-serif;
+  color: rgba(255, 255, 255);
 }
 
 body {
-  background-color: #f4f1de;
+  background-color: rgb(18, 21, 25);
   height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  /* justify-content: center; */
   align-items: center;
+}
+
+h1 {
+  margin: 4rem 0;
 }
 
 .game-board {
@@ -23,12 +29,13 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 5px;
+  gap: 10px;
 }
 
 .game-square {
+  background-color: rgb(18, 21, 25);
   border-radius: 10px;
-  border: 2px solid #3d405b;
+  border: 2px solid rgb(68, 140, 116);
   font-weight: 900;
   font-size: 3.5rem;
   display: flex;

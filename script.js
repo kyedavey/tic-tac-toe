@@ -35,6 +35,7 @@ const gameController = (function () {
     gameBoard.printToConsole();
     console.log(`${getActivePlayerName()}'s turn`);
     displayController.renderGameBoard();
+    displayController.addGameSquareEventListeners();
   };
 
   const playRound = (position) => {
@@ -60,7 +61,6 @@ const gameController = (function () {
       return;
     }
     switchPlayer();
-    displayController.renderGameBoard();
     console.log(`${getActivePlayerName()}'s turn`);
   };
 
@@ -105,14 +105,26 @@ const displayController = (function () {
 
   const renderGameBoard = () => {
     gameSquares.forEach((square) => {
-      console.log(square.getAttribute("data-index"));
       square.textContent = gameBoard.getSquare(
         square.getAttribute("data-index")
       );
     });
   };
 
-  return { renderGameBoard };
+  const gameSquareClicked = (e) => {
+    const position = e.target.getAttribute("data-index");
+    gameController.playRound(position);
+    renderGameBoard();
+    e.target.removeEventListener("click", gameSquareClicked);
+  };
+
+  const addGameSquareEventListeners = () => {
+    gameSquares.forEach((square) =>
+      square.addEventListener("click", gameSquareClicked)
+    );
+  };
+
+  return { renderGameBoard, addGameSquareEventListeners };
 })();
 
 function createPlayer(name, symbol) {
