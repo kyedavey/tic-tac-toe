@@ -3,16 +3,7 @@ const gameBoard = (function () {
   const getSquare = (position) => board[position];
   const setSquare = (position, symbol) => (board[position] = symbol);
   const reset = () => (board = new Array(9));
-  const printToConsole = () => {
-    console.log(
-      `gameBoard:\n0:${getSquare(0)} 1:${getSquare(1)} 2:${getSquare(
-        2
-      )}\n3:${getSquare(3)} 4:${getSquare(4)} 5:${getSquare(5)}\n6:${getSquare(
-        6
-      )} 7:${getSquare(7)} 8:${getSquare(8)}`
-    );
-  };
-  return { getSquare, setSquare, reset, printToConsole };
+  return { getSquare, setSquare, reset };
 })();
 
 const gameController = (function () {
@@ -20,52 +11,32 @@ const gameController = (function () {
   let playerTwo;
   let activePlayer;
   let currentRound;
-  let gameActive = false;
-  let boardUsed = false;
 
   const startGame = () => {
-    console.log("Starting New Game");
-    if (boardUsed) gameBoard.reset();
     playerOne = createPlayer("Player 1", "X");
     playerTwo = createPlayer("Player 2", "O");
     activePlayer = playerOne;
     currentRound = 1;
-    gameActive = true;
-    boardUsed = true;
-    gameBoard.printToConsole();
-    console.log(`${getActivePlayerName()}'s turn`);
     displayController.updateGameBoard();
     displayController.updateGameStatus(`${getActivePlayerName()}'s Turn`);
     displayController.addGameSquareEventListeners();
   };
 
   const playRound = (position) => {
-    if (!gameActive) {
-      console.log("Game has not started");
-      return;
-    }
-    if (gameBoard.getSquare(position)) {
-      console.log("Square Taken, Replay Round");
-      return;
-    }
     gameBoard.setSquare(position, activePlayer.symbol);
     currentRound++;
-    gameBoard.printToConsole();
     if (checkWin()) {
       displayController.updateGameStatus(`${getActivePlayerName()} Wins!`);
-      console.log(`${getActivePlayerName()} wins`);
-      gameActive = false;
+      displayController.removeGameSquareEventListeners();
       return;
     }
     if (currentRound > 9) {
       displayController.updateGameStatus(`Tie!`);
-      console.log(`Tie`);
-      gameActive = false;
+      displayController.removeGameSquareEventListeners();
       return;
     }
     switchPlayer();
     displayController.updateGameStatus(`${getActivePlayerName()}'s turn`);
-    console.log(`${getActivePlayerName()}'s turn`);
   };
 
   const switchPlayer = () =>
@@ -74,7 +45,6 @@ const gameController = (function () {
       : (activePlayer = playerOne);
   const getActivePlayerName = () => activePlayer.name;
   const getActivePlayerSymbol = () => activePlayer.symbol;
-  const getGameStatus = () => gameActive;
 
   const checkWin = () => {
     const winningSequences = [
@@ -100,7 +70,6 @@ const gameController = (function () {
     getActivePlayerName,
     startGame,
     playRound,
-    getGameStatus,
   };
 })();
 
@@ -133,7 +102,18 @@ const displayController = (function () {
     );
   };
 
-  return { updateGameBoard, updateGameStatus, addGameSquareEventListeners };
+  const removeGameSquareEventListeners = () => {
+    gameSquares.forEach((square) =>
+      square.removeEventListener("click", gameSquareClicked)
+    );
+  };
+
+  return {
+    updateGameBoard,
+    updateGameStatus,
+    addGameSquareEventListeners,
+    removeGameSquareEventListeners,
+  };
 })();
 
 function createPlayer(name, symbol) {
