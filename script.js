@@ -34,7 +34,8 @@ const gameController = (function () {
     boardUsed = true;
     gameBoard.printToConsole();
     console.log(`${getActivePlayerName()}'s turn`);
-    displayController.renderGameBoard();
+    displayController.updateGameBoard();
+    displayController.updateGameStatus(`${getActivePlayerName()}'s Turn`);
     displayController.addGameSquareEventListeners();
   };
 
@@ -51,16 +52,19 @@ const gameController = (function () {
     currentRound++;
     gameBoard.printToConsole();
     if (checkWin()) {
+      displayController.updateGameStatus(`${getActivePlayerName()} Wins!`);
       console.log(`${getActivePlayerName()} wins`);
       gameActive = false;
       return;
     }
     if (currentRound > 9) {
+      displayController.updateGameStatus(`Tie!`);
       console.log(`Tie`);
       gameActive = false;
       return;
     }
     switchPlayer();
+    displayController.updateGameStatus(`${getActivePlayerName()}'s turn`);
     console.log(`${getActivePlayerName()}'s turn`);
   };
 
@@ -103,7 +107,7 @@ const gameController = (function () {
 const displayController = (function () {
   const gameSquares = document.querySelectorAll(".game-square");
 
-  const renderGameBoard = () => {
+  const updateGameBoard = () => {
     gameSquares.forEach((square) => {
       square.textContent = gameBoard.getSquare(
         square.getAttribute("data-index")
@@ -111,10 +115,15 @@ const displayController = (function () {
     });
   };
 
+  const updateGameStatus = (str) => {
+    const h2 = document.querySelector("h2");
+    h2.textContent = str;
+  };
+
   const gameSquareClicked = (e) => {
     const position = e.target.getAttribute("data-index");
     gameController.playRound(position);
-    renderGameBoard();
+    updateGameBoard();
     e.target.removeEventListener("click", gameSquareClicked);
   };
 
@@ -124,7 +133,7 @@ const displayController = (function () {
     );
   };
 
-  return { renderGameBoard, addGameSquareEventListeners };
+  return { updateGameBoard, updateGameStatus, addGameSquareEventListeners };
 })();
 
 function createPlayer(name, symbol) {
