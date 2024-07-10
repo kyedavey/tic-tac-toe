@@ -23,7 +23,7 @@ main {
 
 h1,
 h2 {
-  margin: 4rem 0;
+  margin: 3rem 0;
 }
 
 .game-board {
@@ -44,4 +44,15 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+button {
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  color: white;
+  padding: 0.5rem;
+  border: 2px solid rgb(68, 140, 116);
+  border-radius: 5px;
+  background: rgba(68, 140, 116, 0.2);
+  cursor: pointer;
 }

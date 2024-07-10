@@ -1,9 +1,9 @@
 const gameBoard = (function () {
-  let board = new Array(9);
+  let board;
   const getSquare = (position) => board[position];
   const setSquare = (position, symbol) => (board[position] = symbol);
-  const reset = () => (board = new Array(9));
-  return { getSquare, setSquare, reset };
+  const setNewBoard = () => (board = new Array(9));
+  return { getSquare, setSquare, setNewBoard };
 })();
 
 const gameController = (function () {
@@ -12,7 +12,8 @@ const gameController = (function () {
   let activePlayer;
   let currentRound;
 
-  const startGame = () => {
+  const startNewGame = () => {
+    gameBoard.setNewBoard();
     playerOne = createPlayer("Player 1", "X");
     playerTwo = createPlayer("Player 2", "O");
     activePlayer = playerOne;
@@ -68,13 +69,17 @@ const gameController = (function () {
   return {
     getActivePlayerSymbol,
     getActivePlayerName,
-    startGame,
+    startNewGame,
     playRound,
   };
 })();
 
 const displayController = (function () {
   const gameSquares = document.querySelectorAll(".game-square");
+  const gameStatusDisplay = document.querySelector("h2");
+  const restartButton = document.querySelector("Button");
+
+  restartButton.addEventListener("click", gameController.startNewGame);
 
   const updateGameBoard = () => {
     gameSquares.forEach((square) => {
@@ -85,8 +90,7 @@ const displayController = (function () {
   };
 
   const updateGameStatus = (str) => {
-    const h2 = document.querySelector("h2");
-    h2.textContent = str;
+    gameStatusDisplay.textContent = str;
   };
 
   const gameSquareClicked = (e) => {
@@ -120,4 +124,4 @@ function createPlayer(name, symbol) {
   return { name, symbol };
 }
 
-gameController.startGame();
+gameController.startNewGame();
