@@ -1,5 +1,9 @@
 # TIC TAC TOE (Vanilla JS)
 
+![Desktop Preview](/.github/desktop-preview.png)
+
+[Live Demo](https://kyedavey.github.io/tic-tac-toe/)
+
 ## Description
 
 This project implements a classic Tic Tac Toe game using Vanilla JavaScript. The game design follows the Module and Factory patterns to create and manage objects responsible for game logic.
@@ -12,8 +16,8 @@ This project implements a classic Tic Tac Toe game using Vanilla JavaScript. The
 
 ## Key Features
 
-TBD
+- Utilizes the Module Pattern and the Factory Pattern to implement game logic.
 
 ## License
 
-This project is licensed under the MIT License
+![GitHub License](https://img.shields.io/github/license/kyedavey/tic-tac-toe?style=for-the-badge)
