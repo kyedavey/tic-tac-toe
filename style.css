@@ -6,7 +6,7 @@
 }
 
 html {
-  font-family: "Roboto", sans-serif;
+  font-family: "Roboto", system-ui;
   color: rgba(255, 255, 255);
 }
 
@@ -39,7 +39,7 @@ h2 {
   background-color: rgb(18, 21, 25);
   border-radius: 10px;
   border: 2px solid rgb(68, 140, 116);
-  font-family: "Finger Paint", "Roboto", sans-serif;
+  font-family: "Permanent Marker", system-ui;
   font-size: 3.5rem;
   display: flex;
   justify-content: center;
