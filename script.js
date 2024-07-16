@@ -19,9 +19,13 @@ const gameController = (function () {
     playerTwo = createPlayer("Player 2", "O");
     activePlayer = playerOne;
     currentRound = 1;
+    document.documentElement.style.setProperty(
+      "--hover-content",
+      `"${getActivePlayerSymbol()}"`
+    );
     displayController.updateGameBoard();
     displayController.updateGameStatus(`${getActivePlayerName()}'s Turn`);
-    displayController.addGameSquareEventListeners();
+    displayController.activateGameSquare();
     if (winningCombination) {
       displayController.toggleHighlightWinningCombination(winningCombination);
       winningCombination = undefined;
@@ -34,16 +38,20 @@ const gameController = (function () {
     winningCombination = checkWin();
     if (winningCombination) {
       displayController.updateGameStatus(`${getActivePlayerName()} Wins!`);
-      displayController.removeGameSquareEventListeners();
+      displayController.deactivateGameSquare();
       displayController.toggleHighlightWinningCombination(winningCombination);
       return;
     }
     if (currentRound > 9) {
       displayController.updateGameStatus(`Tie!`);
-      displayController.removeGameSquareEventListeners();
+      displayController.deactivateGameSquare();
       return;
     }
     switchPlayer();
+    document.documentElement.style.setProperty(
+      "--hover-content",
+      `"${getActivePlayerSymbol()}"`
+    );
     displayController.updateGameStatus(`${getActivePlayerName()}'s turn`);
   };
 
@@ -111,26 +119,29 @@ const displayController = (function () {
     gameController.playRound(position);
     updateGameBoard();
     e.target.removeEventListener("click", gameSquareClicked);
+    e.target.classList.remove("active");
   };
 
-  const addGameSquareEventListeners = () => {
-    gameSquares.forEach((square) =>
-      square.addEventListener("click", gameSquareClicked)
-    );
+  const activateGameSquare = () => {
+    gameSquares.forEach((square) => {
+      square.addEventListener("click", gameSquareClicked);
+      square.classList.add("active");
+    });
   };
 
-  const removeGameSquareEventListeners = () => {
-    gameSquares.forEach((square) =>
-      square.removeEventListener("click", gameSquareClicked)
-    );
+  const deactivateGameSquare = () => {
+    gameSquares.forEach((square) => {
+      square.removeEventListener("click", gameSquareClicked);
+      square.classList.remove("active");
+    });
   };
 
   return {
     updateGameBoard,
     updateGameStatus,
     toggleHighlightWinningCombination,
-    addGameSquareEventListeners,
-    removeGameSquareEventListeners,
+    activateGameSquare,
+    deactivateGameSquare,
   };
 })();
 

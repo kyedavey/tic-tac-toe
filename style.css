@@ -5,6 +5,10 @@
   margin: 0;
 }
 
+:root {
+  --hover-content: ;
+}
+
 html {
   font-family: "Roboto", system-ui;
   color: rgba(255, 255, 255);
@@ -44,6 +48,11 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.game-square.active:hover::after {
+  content: var(--hover-content);
+  opacity: 0.2;
 }
 
 .game-square.highlight {
