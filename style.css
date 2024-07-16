@@ -29,7 +29,6 @@ h2 {
 .game-board {
   width: 300px;
   height: 300px;
-  font-family: "Finger Paint", "Roboto", sans-serif;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -40,7 +39,7 @@ h2 {
   background-color: rgb(18, 21, 25);
   border-radius: 10px;
   border: 2px solid rgb(68, 140, 116);
-  font-weight: 900;
+  font-family: "Finger Paint", "Roboto", sans-serif;
   font-size: 3.5rem;
   display: flex;
   justify-content: center;
