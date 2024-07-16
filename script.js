@@ -11,6 +11,7 @@ const gameController = (function () {
   let playerTwo;
   let activePlayer;
   let currentRound;
+  let winningCombination;
 
   const startNewGame = () => {
     gameBoard.setNewBoard();
@@ -21,14 +22,19 @@ const gameController = (function () {
     displayController.updateGameBoard();
     displayController.updateGameStatus(`${getActivePlayerName()}'s Turn`);
     displayController.addGameSquareEventListeners();
+    if (winningCombination) {
+      displayController.toggleHighlightWinningCombination(winningCombination);
+    }
   };
 
   const playRound = (position) => {
     gameBoard.setSquare(position, activePlayer.symbol);
     currentRound++;
-    if (checkWin()) {
+    winningCombination = checkWin();
+    if (winningCombination) {
       displayController.updateGameStatus(`${getActivePlayerName()} Wins!`);
       displayController.removeGameSquareEventListeners();
+      displayController.toggleHighlightWinningCombination(winningCombination);
       return;
     }
     if (currentRound > 9) {
@@ -59,7 +65,7 @@ const gameController = (function () {
       [2, 4, 6],
     ];
 
-    return winningSequences.some((sequence) => {
+    return winningSequences.find((sequence) => {
       return sequence.every(
         (position) => gameBoard.getSquare(position) === activePlayer.symbol
       );
@@ -93,6 +99,12 @@ const displayController = (function () {
     gameStatusDisplay.textContent = str;
   };
 
+  const toggleHighlightWinningCombination = (winningCombination) => {
+    winningCombination.forEach((square) => {
+      gameSquares[square].classList.toggle("highlight");
+    });
+  };
+
   const gameSquareClicked = (e) => {
     const position = e.target.getAttribute("data-index");
     gameController.playRound(position);
@@ -115,6 +127,7 @@ const displayController = (function () {
   return {
     updateGameBoard,
     updateGameStatus,
+    toggleHighlightWinningCombination,
     addGameSquareEventListeners,
     removeGameSquareEventListeners,
   };

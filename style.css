@@ -46,6 +46,10 @@ h2 {
   align-items: center;
 }
 
+.game-square.highlight {
+  background-color: rgba(68, 140, 116, 0.2);
+}
+
 button {
   font-family: "Roboto", sans-serif;
   font-weight: bold;
