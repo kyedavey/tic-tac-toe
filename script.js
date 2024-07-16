@@ -24,6 +24,7 @@ const gameController = (function () {
     displayController.addGameSquareEventListeners();
     if (winningCombination) {
       displayController.toggleHighlightWinningCombination(winningCombination);
+      winningCombination = undefined;
     }
   };
 
